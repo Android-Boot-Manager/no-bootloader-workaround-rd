@@ -8,7 +8,7 @@
 #include <unistd.h>
 
 int main() {
-	gui_init()
+	gui_init();
     
 	// Sleep forever
 	for(;;)
