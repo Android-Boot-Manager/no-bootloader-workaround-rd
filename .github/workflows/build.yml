@@ -15,7 +15,7 @@ jobs:
     - name: Check out source
       uses: actions/checkout@v2
     - name: Check out submodules
-      run: git submodules update --init
+      run: git submodule update --init
     - name: Build
       run: make
     - name: Upload result
