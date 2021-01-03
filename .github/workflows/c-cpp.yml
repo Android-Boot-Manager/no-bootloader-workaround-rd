@@ -12,10 +12,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: make
+    - name: Check out source
+      uses: actions/checkout@v2
+    - name: Check out submodules
+      run: git submodules update --init
+    - name: Build
       run: make
-    - uses: actions/upload-artifact@v2
+    - name: Upload result
+      uses: actions/upload-artifact@v2
       with:
           name: rd
           path: abmbin
