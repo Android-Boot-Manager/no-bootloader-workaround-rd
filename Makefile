@@ -37,12 +37,24 @@ OBJS = $(AOBJS) $(COBJS)
 
 ## MAINOBJ -> OBJFILES
 
-all: abmbin
+all: rdcpiogz
 
 %.o: %.c
 	@$(CC)  $(CFLAGS) -c $< -o $@
 	@echo "CC $<"
     
+
+rd: abmbin
+	@echo "Building ramdisk"
+	@mkdir -p out/rd/bin
+	@cp prebuilts/* out/rd/bin/
+	@cp scripts/init out/rd/
+	@cp abm out/rd/bin/
+
+rdcpiogz: rd
+	@echo "Compressing rd with cpio"
+	@(cd out/rd/ && find . | cpio -o -H newc | gzip > ../rd.cpio.gz)
+
 abmbin: $(AOBJS) $(COBJS) $(MAINOBJ)
 	$(CC) -o $(BIN) $(MAINOBJ) $(AOBJS) $(COBJS) $(LDFLAGS)
 
