@@ -1,0 +1,32 @@
+#!/bin/sh
+
+echo "Welcome to ABM"
+
+# Mount things needed by this script
+mkdir /proc
+mkdir /sys
+mkdir /etc
+mkdir /mnt
+mount -t proc proc /proc
+mount -t sysfs sysfs /sys
+
+mkdir /config
+mount -t configfs -o nodev,noexec,nosuid configfs /config
+
+# Create all the symlinks to /bin/busybox
+mkdir -p /usr/bin
+mkdir -p /sbin
+mkdir -p /usr/sbin
+echo "Installing Busybox..." && /bin/busybox --install -s
+
+echo /sbin/mdev > /proc/sys/kernel/hotplug
+mdev -s
+
+abm
+
+while true
+do
+    echo hi
+    sleep 5
+done
+
