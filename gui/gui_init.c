@@ -42,23 +42,20 @@ void gui_init() {
 	disp_drv.buffer = &disp_buf;
 	disp_drv.flush_cb = fbdev_flush;
     
-    uint32_t width=0;
-    uint32_t height=0;
+    // Get resolution
+    uint32_t width,height=0;
     fbdev_get_sizes(&width, &height);
     
     printf("Framebuffer resolution: %d x %d\n", width, height);
     
+    
+    // Set resolution
     disp_drv.hor_res = width;
     disp_drv.ver_res = height;
     
+    // Register disp drv
 	lv_disp_drv_register(&disp_drv);
     
-    //LV_THEME_DEFAULT_INIT(LV_COLOR_GRAY, LV_COLOR_GRAY,
-    //                      LV_THEME_MATERIAL_FLAG_DARK,
-    //                      lv_theme_get_font_small(), lv_theme_get_font_normal(), lv_theme_get_font_subtitle(), lv_theme_get_font_title());
-    
-    lv_obj_t * win = lv_win_create(lv_scr_act(), NULL);
-    lv_win_set_title(win, "Boot menu"); 
-
+    // Create LVGL thread
     thrd_create(&tick_thrd_t, (thrd_start_t)tick_thrd, NULL);
 }
