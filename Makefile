@@ -13,8 +13,8 @@ WARNINGS ?= -Wall -Wextra \
 						-Wempty-body -Wshift-negative-value -Wstack-usage=2048 \
             -Wtype-limits -Wsizeof-pointer-memaccess -Wpointer-arith
             
-CFLAGS ?= -O3 -g0 -I$(LVGL_DIR)/ $(WARNINGS)
-LDFLAGS ?= -lm -lpthread
+CFLAGS ?= -O3 -g0 -I$(LVGL_DIR)/ $(WARNINGS) -static
+LDFLAGS ?= -lm -lpthread -static
 BIN = abm
 
 
@@ -37,13 +37,13 @@ OBJS = $(AOBJS) $(COBJS)
 
 ## MAINOBJ -> OBJFILES
 
-all: default
+all: abmbin
 
 %.o: %.c
 	@$(CC)  $(CFLAGS) -c $< -o $@
 	@echo "CC $<"
     
-default: $(AOBJS) $(COBJS) $(MAINOBJ)
+abmbin: $(AOBJS) $(COBJS) $(MAINOBJ)
 	$(CC) -o $(BIN) $(MAINOBJ) $(AOBJS) $(COBJS) $(LDFLAGS)
 
 clean: 

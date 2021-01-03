@@ -7,7 +7,8 @@
 #include <threads.h>
 #include <unistd.h>
 
-int main() {
+int main(void) {
+    printf("Abm start\n");
 	gui_init();
     
 	// Sleep forever
