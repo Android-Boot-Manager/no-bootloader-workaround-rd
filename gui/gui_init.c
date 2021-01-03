@@ -48,8 +48,8 @@ void gui_init() {
     
     printf("Framebuffer resolution: %d x %d\n", width, height);
     
-    disp_drv.hor_res = 1080;
-    disp_drv.ver_res = 2100;
+    disp_drv.hor_res = width;
+    disp_drv.ver_res = height;
     
 	lv_disp_drv_register(&disp_drv);
     
