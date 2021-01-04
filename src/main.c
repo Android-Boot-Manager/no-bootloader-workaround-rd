@@ -1,6 +1,8 @@
 #include "../utils/lvgl/lvgl.h"
 
 #include "../gui/gui_init.h"
+#include "../gui/menu.h"
+
 #include "abm_device.h"
 
 #include <dirent.h>
@@ -27,6 +29,7 @@ int main(int argc, char *argv[]) {
     printf("Running on: %s, dpi: %d\n", device.codname, device.dpi);
 	gui_init(device);
     
+    create_window("Boot menu");
 	// Sleep forever
 	for(;;)
 		usleep(5000);
