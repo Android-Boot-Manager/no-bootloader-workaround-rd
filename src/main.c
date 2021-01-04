@@ -1,6 +1,8 @@
 #include "../utils/lvgl/lvgl.h"
 
 #include "../gui/gui_init.h"
+#include "abm_device.h"
+
 #include <dirent.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -8,11 +10,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-struct abm_device {
-   int  dpi;
-   char * codname;
-} device;  
-
+struct abm_device device;
 
 int main(int argc, char *argv[]) {
     printf("Abm start\n");
@@ -27,7 +25,7 @@ int main(int argc, char *argv[]) {
     device.codname = argv[2];
     
     printf("Running on: %s, dpi: %d\n", device.codname, device.dpi);
-	gui_init();
+	gui_init(device);
     
 	// Sleep forever
 	for(;;)
