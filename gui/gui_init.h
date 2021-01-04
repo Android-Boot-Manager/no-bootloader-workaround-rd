@@ -1,1 +1,1 @@
- 
+void gui_init(); 

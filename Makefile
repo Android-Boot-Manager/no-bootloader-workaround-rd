@@ -37,7 +37,7 @@ OBJS = $(AOBJS) $(COBJS)
 
 ## MAINOBJ -> OBJFILES
 
-all: rdcpiogz
+all: rdcpiogz-generic rdcpiogz-vollaphone
 
 %.o: %.c
 	@$(CC)  $(CFLAGS) -c $< -o $@
@@ -50,8 +50,13 @@ rd: abmbin
 	@cp prebuilts/* out/rd/bin/
 	@cp scripts/init out/rd/
 	@cp abm out/rd/bin/
-
-rdcpiogz: rd
+	
+rdcpiogz-vollaphone: rd
+	@cp devices/vollaphone/env.sh out/rd/env.sh
+	@echo "Compressing rd with cpio"
+	@(cd out/rd/ && find . | cpio -o -H newc | gzip > ../rd.cpio.gz)
+	
+rdcpiogz-generic: rd
 	@echo "Compressing rd with cpio"
 	@(cd out/rd/ && find . | cpio -o -H newc | gzip > ../rd.cpio.gz)
 

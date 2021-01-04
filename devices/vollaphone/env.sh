@@ -1,0 +1,3 @@
+DEVICECODNAME="yggdrasil"
+DEVICE_DPI="400"
+
