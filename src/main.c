@@ -1,10 +1,10 @@
 #include "../utils/lvgl/lvgl.h"
 
-#include "../gui/gui_init.h"
-#include "../gui/menu.h"
+#include <gui_init.h>
+#include <menu.h>
 
-#include "abm_device.h"
-#include "partition.h"
+#include <abm_device.h>
+#include <partition.h>
 
 #include <dirent.h>
 #include <fcntl.h>

@@ -1,6 +1,6 @@
 #include "../utils/lv_drv_conf.h"
 #include "../utils/lvgl/lvgl.h"
-#include "../src/abm_device.h"
+#include <abm_device.h>
 
 #include "../utils/lv_drivers/display/fbdev.h"
 
