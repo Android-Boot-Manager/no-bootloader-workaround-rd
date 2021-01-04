@@ -23,9 +23,9 @@ echo /sbin/mdev > /proc/sys/kernel/hotplug
 mdev -s
 
 if [ -f "env.sh" ]; then
-    source env.sh
+    . /env.sh
 else 
-    source env-fallback.sh
+    . /env-fallback.sh
 fi
 
 
