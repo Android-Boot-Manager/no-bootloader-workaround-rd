@@ -4,6 +4,7 @@
 #include "../gui/menu.h"
 
 #include "abm_device.h"
+#include "partition.h"
 
 #include <dirent.h>
 #include <fcntl.h>
@@ -17,7 +18,7 @@ struct abm_device device;
 int main(int argc, char *argv[]) {
     printf("Abm start\n");
 
-    if(argc<3)
+    if(argc<4)
     {
         printf("ERROR: Not enough arguments\n");
         exit(1);
@@ -25,8 +26,12 @@ int main(int argc, char *argv[]) {
     
     device.dpi= atoi(argv[1]);
     device.codname = argv[2];
+    device.sd_card_meta_path = argv[3];
     
     printf("Running on: %s, dpi: %d\n", device.codname, device.dpi);
+    
+    mount_sdcard_meta(device);
+     
 	gui_init(device);
     
     create_window("Boot menu");

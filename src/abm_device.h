@@ -3,5 +3,6 @@
 struct abm_device {
    int  dpi;
    char * codname;
+   char * sd_card_meta_path;
 };  
 #endif

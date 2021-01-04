@@ -29,7 +29,7 @@ else
 fi
 
 
-abm "$DEVICE_DPI" "$DEVICECODNAME"
+abm "$DEVICE_DPI" "$DEVICECODNAME" "$SD_META_PATH"
 
 while true
 do
