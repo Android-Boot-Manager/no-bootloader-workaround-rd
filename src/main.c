@@ -12,8 +12,9 @@
 #include <threads.h>
 #include <unistd.h>
 #include <stdlib.h>
-
+#include "config.h"
 struct abm_device device;
+struct boot_entry *entry_list;
 
 int main(int argc, char *argv[]) {
     printf("Abm start\n");
@@ -33,6 +34,8 @@ int main(int argc, char *argv[]) {
     gui_init(device);
     
     mount_sdcard_meta(device);
+    
+    parse_boot_entries(&entry_list);
     
     create_window("Boot menu");
 	// Sleep forever

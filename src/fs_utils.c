@@ -16,14 +16,14 @@ int dir_count_entries(const char *path) {
     // Process each entry.
     int res=0;
     while ((pDirent = readdir(pDir)) != NULL) {
-        if(pDirent->d_type==DT_DIR){
+        if(pDirent->d_type==DT_REG){
             res+=1;
             printf ("[%s]\n", pDirent->d_name);
         }
     }
 
     // Close directory and exit.
-    printf("Found: %d dirs", res-2);
+    printf("Found: %d dirs\n", res);
     closedir (pDir);
-    return res-2;
+    return res;
 }

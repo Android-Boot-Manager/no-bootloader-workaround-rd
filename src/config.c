@@ -7,6 +7,7 @@
 #include <string.h>
 #include <err.h>
 #include "config.h"
+#include "fs_utils.h"
 #include <dirent.h>
 
 #define ENTRIES_DIR "/meta/db/entries"
@@ -35,15 +36,15 @@ int config_parse_option(char **_dest, const char *option, const char *buffer) {
 	return 0;
 }
 
-int parse_boot_entry_file(struct boot_entry *entry, struct dirent *ent) {
+int parse_boot_entry_file(struct boot_entry *entry, char *file) {
 	int ret;
     FILE *fp;
 	unsigned char *buf;
-
-	char *path = malloc(strlen(ent->d_name) + strlen(ENTRIES_DIR"/") + 1);
-	strcpy(path, ENTRIES_DIR"/");
-	strcat(path, ent->d_name);
-
+	char *path = malloc(strlen(file) + strlen(ENTRIES_DIR) + strlen("/") + 1);
+	strcpy(path, ENTRIES_DIR);
+	strcat(path, "/");
+	strcat(path, file);
+    
 	fp = fopen (path, "r");
 	if(fp==NULL) {
 		return 1;
@@ -58,7 +59,6 @@ int parse_boot_entry_file(struct boot_entry *entry, struct dirent *ent) {
     
 	fclose(fp);
     
-    printf("read %s", buf);
 	buf[fsize] = '\0';
 	
 	ret = config_parse_option(&entry->title, "title", (const char *)buf);
@@ -137,15 +137,17 @@ int parse_boot_entries(struct boot_entry **_entry_list) {
   
 	int i = 0;
 	while((pDirent = readdir(pDir)) != NULL) {
-		struct boot_entry *entry = entry_list + i;
-		ret = parse_boot_entry_file(entry, pDirent);
-		if(ret < 0) {
-			//printf("error passing entry: %s\n", ent.name);
-			entry->error = true;
-			entry->title = "SYNTAX ERROR";
-		}
+        if(pDirent->d_type==DT_REG){
+            struct boot_entry *entry = entry_list + i;
+            ret = parse_boot_entry_file(entry, pDirent->d_name);
+            if(ret < 0) {
+                entry->error = true;
+                entry->title = "SYNTAX ERROR";
+            }
+        }
 		i++;
 	}
+	
 	closedir (pDir);
 	
 	*_entry_list = entry_list;
