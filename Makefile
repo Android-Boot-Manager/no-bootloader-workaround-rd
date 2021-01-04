@@ -48,7 +48,7 @@ rd: abmbin
 	@echo "Building ramdisk"
 	@mkdir -p out/rd/bin
 	@cp prebuilts/* out/rd/bin/
-	@cp scripts/init out/rd/
+	@cp scripts/* out/rd/
 	@cp abm out/rd/bin/
 	
 rdcpiogz-vollaphone: rd

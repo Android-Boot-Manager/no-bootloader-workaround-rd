@@ -22,7 +22,12 @@ echo "Installing Busybox..." && /bin/busybox --install -s
 echo /sbin/mdev > /proc/sys/kernel/hotplug
 mdev -s
 
-source env.sh
+if [ -f "env.sh" ]; then
+    source env.sh
+else 
+    source env-fallback.sh
+fi
+
 
 abm "$DEVICE_DPI" "$DEVICECODNAME"
 
