@@ -109,37 +109,31 @@ int get_entry_count(void) {
 	return entry_count;
 }
 
-int parse_boot_entries(struct boot_entry **_entry_list) {
+int parse_boot_entries(struct boot_entry **entry_list) {
 	int ret;
-
-	struct boot_entry *entry_list;
+    printf("Begin parsing entrys.%s");
 
 	ret = entry_count = dir_count_entries(ENTRIES_DIR);
 	if (ret < 0) {
 		entry_count = 0;
-		return ret;
-	}
-
-	entry_list = malloc(entry_count * sizeof(struct boot_entry));
-	if(!entry_list) {
-		entry_count = 0;
-		return 1;
 	}
 
 	struct dirent *pDirent;
     DIR *pDir;
 
-    pDir = opendir (ENTRIES_DIR);
+    printf("Reading from: %s\n", ENTRIES_DIR);
+    pDir = opendir(ENTRIES_DIR);
     if (pDir == NULL) {
         printf ("Cannot open directory '%s'\n", ENTRIES_DIR);
-        return 1;
     }
   
 	int i = 0;
 	while((pDirent = readdir(pDir)) != NULL) {
-        if(pDirent->d_type==DT_REG){
-            struct boot_entry *entry = entry_list + i;
+         if(pDirent->d_type==DT_REG){
+            printf ("Parsing: %s\n", pDirent->d_name);
+            struct boot_entry *entry = entry_list+i;
             ret = parse_boot_entry_file(entry, pDirent->d_name);
+            printf ("Parsed: %s, title: %s\n", pDirent->d_name, entry->title);
             if(ret < 0) {
                 entry->error = true;
                 entry->title = "SYNTAX ERROR";
@@ -148,10 +142,9 @@ int parse_boot_entries(struct boot_entry **_entry_list) {
 		i++;
 	}
 	
+	printf ("Parsed evrything\n");
 	closedir (pDir);
-	
-	*_entry_list = entry_list;
-	
+    //printf("First entry is: %s\n", entry_list->title);
 	return 0;
 }
 

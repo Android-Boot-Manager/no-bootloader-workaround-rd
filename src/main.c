@@ -12,9 +12,10 @@
 #include <threads.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include "config.h"
+#include <config.h>
+
 struct abm_device device;
-struct boot_entry *entry_list;
+struct boot_entry entry_list;
 
 int main(int argc, char *argv[]) {
     printf("Abm start\n");
@@ -35,9 +36,14 @@ int main(int argc, char *argv[]) {
     
     mount_sdcard_meta(device);
     
-    parse_boot_entries(&entry_list);
-    
-    create_window("Boot menu");
+     parse_boot_entries(&entry_list);
+     
+    int size = sizeof(entry_list) / sizeof(struct boot_entry);
+
+    printf("Boot_entry len: %u", size); 
+    printf("First entry is: %s\n", entry_list.dtb);
+    fflush(stdout);
+    create_menu_from_entry_list(&entry_list, get_entry_count());
 	// Sleep forever
 	for(;;)
 		usleep(5000);
