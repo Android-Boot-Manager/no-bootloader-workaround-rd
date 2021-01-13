@@ -138,8 +138,8 @@ int parse_boot_entries(struct boot_entry **entry_list) {
                 entry->error = true;
                 entry->title = "SYNTAX ERROR";
             }
+            i++;
         }
-		i++;
 	}
 	
 	printf ("Parsed evrything\n");
