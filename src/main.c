@@ -17,6 +17,11 @@
 struct abm_device device;
 struct boot_entry entry_list;
 
+static void event_handler(lv_obj_t * obj, lv_event_t event)
+{
+    
+}
+
 int main(int argc, char *argv[]) {
     printf("Abm start\n");
 
@@ -39,12 +44,16 @@ int main(int argc, char *argv[]) {
      parse_boot_entries(&entry_list);
      
     int size = sizeof(entry_list) / sizeof(struct boot_entry);
-
-    printf("Boot_entry len: %u", size); 
-    printf("First entry is: %s\n", entry_list.dtb);
-    fflush(stdout);
-    create_menu_from_entry_list(&entry_list, get_entry_count());
-	// Sleep forever
+    printf("1\n");
+    create_window("Boot Menu");
+    create_menu();
+    add_button_to_menu(event_handler, "Hi");
+        
+    //for(int i=0; i<size; i++){ 
+      //  printf("2\n");
+      //  add_button_to_menu(create_menu(), event_handler, "Hi");
+        
+    //}
 	for(;;)
 		usleep(5000);
 }
