@@ -109,9 +109,11 @@ int get_entry_count(void) {
 	return entry_count;
 }
 
-int parse_boot_entries(struct boot_entry **entry_list) {
+int parse_boot_entries(struct boot_entry **_entry_list) {
 	int ret;
     printf("Begin parsing entrys.%s");
+
+    struct boot_entry *entry_list=malloc(sizeof(struct boot_entry)*dir_count_entries(ENTRIES_DIR));    
 
 	ret = entry_count = dir_count_entries(ENTRIES_DIR);
 	if (ret < 0) {
@@ -131,7 +133,7 @@ int parse_boot_entries(struct boot_entry **entry_list) {
 	while((pDirent = readdir(pDir)) != NULL) {
          if(pDirent->d_type==DT_REG){
             printf ("Parsing: %s\n", pDirent->d_name);
-            struct boot_entry *entry = entry_list+i;
+            struct boot_entry *entry = (entry_list+i);
             ret = parse_boot_entry_file(entry, pDirent->d_name);
             printf ("Parsed: %s, title: %s\n", pDirent->d_name, entry->title);
             if(ret < 0) {
@@ -144,6 +146,8 @@ int parse_boot_entries(struct boot_entry **entry_list) {
 	
 	printf ("Parsed evrything\n");
 	closedir (pDir);
+    
+   *_entry_list = entry_list;
     //printf("First entry is: %s\n", entry_list->title);
 	return 0;
 }

@@ -15,7 +15,7 @@
 #include <config.h>
 
 struct abm_device device;
-struct boot_entry entry_list;
+struct boot_entry *entry_list;
 
 static void event_handler(lv_obj_t * obj, lv_event_t event)
 {
@@ -41,19 +41,18 @@ int main(int argc, char *argv[]) {
     
     mount_sdcard_meta(device);
     
-     parse_boot_entries(&entry_list);
+    
+    
+    parse_boot_entries(&entry_list);
      
     int size = sizeof(entry_list) / sizeof(struct boot_entry);
-    printf("1\n");
     create_window("Boot Menu");
     create_menu();
-    add_button_to_menu(event_handler, "Hi");
-        
-    //for(int i=0; i<size; i++){ 
-      //  printf("2\n");
-      //  add_button_to_menu(create_menu(), event_handler, "Hi");
-        
-    //}
+    
+    for(int i=0; i<get_entry_count(); i++){
+        add_button_to_menu(event_handler, (entry_list+i)->title);
+    }
+    
 	for(;;)
 		usleep(5000);
 }
