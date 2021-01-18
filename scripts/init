@@ -28,7 +28,7 @@ else
     . /env-fallback.sh
 fi
 
-
+sleep 10
 abm "$DEVICE_DPI" "$DEVICECODNAME" "$SD_META_PATH"
 
 while true

@@ -8,9 +8,9 @@ void mount_sdcard_meta(struct abm_device device) {
     mkdir("/meta", 0700);
     if (0 != mount(device.sd_card_meta_path, "/meta", "ext2", 0, "")) {
         show_error("unable to mount meta\n");
-        //for(;;){
-         //usleep(5000);   
-        //}
+        for(;;){
+         usleep(5000);   
+        }
     }
 }
 
