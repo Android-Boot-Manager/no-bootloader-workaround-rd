@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     
     printf("Running on: %s, dpi: %d\n", device.codname, device.dpi);
     
-    gui_init(device);
+    gui_init(&device);
     
     mount_sdcard_meta(device);
     

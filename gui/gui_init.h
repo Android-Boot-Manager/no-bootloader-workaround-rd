@@ -1,3 +1,3 @@
 #include <abm_device.h>
 
-void gui_init(struct abm_device device);
+void gui_init(struct abm_device *device);

@@ -22,7 +22,7 @@ void tick_thrd() {
 	}
 }
 
-void gui_init(struct abm_device device) {
+void gui_init(struct abm_device *device) {
 	thrd_t tick_thrd_t;
 
 	// Initialize LVGL
@@ -51,9 +51,11 @@ void gui_init(struct abm_device device) {
     
     
     // Set resolution
+    device->x_res=width;
+    device->y_res=height;
     disp_drv.hor_res = width;
     disp_drv.ver_res = height;
-    disp_drv.dpi = device.dpi;
+    disp_drv.dpi = device->dpi;
     // Register disp drv
 	lv_disp_drv_register(&disp_drv);
     
