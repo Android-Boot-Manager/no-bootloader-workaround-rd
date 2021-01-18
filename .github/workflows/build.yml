@@ -21,5 +21,5 @@ jobs:
     - name: Upload result
       uses: actions/upload-artifact@v2
       with:
-          name: rd
-          path: abmbin
+          name: binary
+          path: abm
