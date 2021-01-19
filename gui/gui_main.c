@@ -13,7 +13,11 @@
 #include <config.h>
 
 lv_obj_t * win;
-lv_obj_t * list1;
+lv_obj_t *tabview;
+lv_obj_t *tab_boot_menu;
+lv_obj_t *tab_extras;
+lv_obj_t *tab_development;
+lv_obj_t * gui_boot_menu;
 
 void create_window(char * name){
     win = lv_win_create(lv_scr_act(), NULL);
@@ -23,15 +27,24 @@ void create_window(char * name){
     
 }
 
+void create_main_tabview(){
+     /*Create a Tab view object*/
+    tabview = lv_tabview_create(win, NULL);
+
+    /*Add 3 tabs (the tabs are page (lv_page) and can be scrolled*/
+    tab_boot_menu = lv_tabview_add_tab(tabview, "Boot Menu");
+    tab_extras = lv_tabview_add_tab(tabview, "Extras");
+    tab_development = lv_tabview_add_tab(tabview, "Development");
+}
+
 void create_menu(){
-    list1 = lv_list_create(win, NULL);
-    lv_obj_set_size(list1, 1000, 1000);
-    lv_obj_align(list1, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
-    lv_list_set_anim_time(list1, 0);
+    gui_boot_menu = lv_list_create(tab_boot_menu, NULL);
+    lv_obj_set_size(gui_boot_menu, 1000, 1000);
+    lv_obj_align(gui_boot_menu, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
 }
 
 void add_button_to_menu(lv_event_cb_t event_cb, char * text){
-    lv_obj_t * list_btn = lv_list_add_btn(list1,  LV_SYMBOL_FILE, text);
+    lv_obj_t * list_btn = lv_list_add_btn(gui_boot_menu,  LV_SYMBOL_FILE, text);
     lv_obj_set_event_cb(list_btn, event_cb);
     
 }

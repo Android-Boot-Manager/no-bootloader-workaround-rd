@@ -46,7 +46,8 @@ int main(int argc, char *argv[]) {
     parse_boot_entries(&entry_list);
      
     int size = sizeof(entry_list) / sizeof(struct boot_entry);
-    create_window("Boot Menu");
+    create_window("ABM");
+    create_main_tabview();
     create_menu();
     
     for(int i=0; i<get_entry_count(); i++){
