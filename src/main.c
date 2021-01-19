@@ -1,7 +1,7 @@
 #include "../utils/lvgl/lvgl.h"
 
 #include <gui_init.h>
-#include <menu.h>
+#include <gui_main.h>
 
 #include <abm_device.h>
 #include <partition.h>
