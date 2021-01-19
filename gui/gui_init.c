@@ -14,6 +14,9 @@
 #include <threads.h>
 #include <unistd.h>
 
+static lv_indev_drv_t kp_drv;
+static lv_indev_t * kp_indev;
+
 void tick_thrd() {
 	for(;;) {
 		usleep(5); // Sleep for 5 milliseconds
@@ -59,6 +62,51 @@ void gui_init(struct abm_device *device) {
     // Register disp drv
 	lv_disp_drv_register(&disp_drv);
     
+    // enable event input
+	evdev_init();
+
+	// get mouse as an input
+	lv_indev_drv_t indev_drv;
+	lv_indev_drv_init(&indev_drv);
+	indev_drv.type = LV_INDEV_TYPE_POINTER;
+	indev_drv.read_cb = evdev_read;
+	
+	lv_indev_t * mouse_indev = lv_indev_drv_register(&indev_drv);
+
+	lv_obj_t * cursor_obj = lv_img_create(lv_scr_act(), NULL); //Create an image for the cursor
+	lv_img_set_src(cursor_obj, LV_SYMBOL_FILE); //For simlicity add a built in symbol not an image
+	lv_indev_set_cursor(mouse_indev, cursor_obj); // connect the object to the driver
+
+      
     // Create LVGL thread
+     /*Create a Tab view object*/
+    lv_obj_t *tabview;
+    tabview = lv_tabview_create(lv_scr_act(), NULL);
+
+    /*Add 3 tabs (the tabs are page (lv_page) and can be scrolled*/
+    lv_obj_t *tab1 = lv_tabview_add_tab(tabview, "Tab 1");
+    lv_obj_t *tab2 = lv_tabview_add_tab(tabview, "Tab 2");
+    lv_obj_t *tab3 = lv_tabview_add_tab(tabview, "Tab 3");
+
+
+    /*Add content to the tabs*/
+    lv_obj_t * label = lv_label_create(tab1, NULL);
+    lv_label_set_text(label, "This the first tab\n\n"
+                             "If the content\n"
+                             "of a tab\n"
+                             "become too long\n"
+                             "the it \n"
+                             "automatically\n"
+                             "become\n"
+                             "scrollable.");
+
+    label = lv_label_create(tab2, NULL);
+    lv_label_set_text(label, "Second tab");
+
+    label = lv_label_create(tab3, NULL);
+    lv_label_set_text(label, "Third tab");
+    
     thrd_create(&tick_thrd_t, (thrd_start_t)tick_thrd, NULL);
+    for(;;)
+		usleep(5000);
 }
