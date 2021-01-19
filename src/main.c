@@ -25,7 +25,7 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 int main(int argc, char *argv[]) {
     printf("Abm start\n");
 
-    if(argc<4)
+    if(argc<5)
     {
         printf("ERROR: Not enough arguments\n");
         exit(1);
@@ -34,6 +34,7 @@ int main(int argc, char *argv[]) {
     device.dpi= atoi(argv[1]);
     device.codname = argv[2];
     device.sd_card_meta_path = argv[3];
+    device.touchscreen_dev_path = argv[4];
     
     printf("Running on: %s, dpi: %d\n", device.codname, device.dpi);
     
