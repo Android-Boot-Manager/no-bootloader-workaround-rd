@@ -39,7 +39,7 @@ void create_main_tabview(){
 
 void create_menu(){
     gui_boot_menu = lv_list_create(tab_boot_menu, NULL);
-    lv_obj_set_size(gui_boot_menu, 1000, 1000);
+    lv_obj_set_size(gui_boot_menu, lv_obj_get_width(tab_boot_menu), lv_obj_get_height(tab_boot_menu));
     lv_obj_align(gui_boot_menu, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
 }
 
