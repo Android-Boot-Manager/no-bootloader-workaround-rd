@@ -28,10 +28,6 @@ else
     . /env-fallback.sh
 fi
 
-mkdir /system
-mount /dev/mmcblk0p31 /system
-mount /dev/mmcblk0p30 /system/vendor
-exec switch_root /system /init
 sleep 10
 abm "$DEVICE_DPI" "$DEVICECODNAME" "$SD_META_PATH" "$TOUCHSCREEN_PATH"
 
