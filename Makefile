@@ -55,7 +55,7 @@ rd: abmbin
 rdcpiogz-vollaphone: rd
 	@cp devices/vollaphone/env.sh out/rd/env.sh
 	@echo "Compressing rd with cpio"
-	@(cd out/rd/ && find . | cpio -o -H newc | gzip > ../rd.cpio.gz)
+	@(cd out/rd/ && find . | cpio -o -H newc | gzip > ../rd-yggdrasil.cpio.gz)
 	
 rdcpiogz-generic: rd
 	@echo "Compressing rd with cpio"
