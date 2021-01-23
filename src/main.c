@@ -13,13 +13,15 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <config.h>
+#include <boot.h>
 
 struct abm_device device;
 struct boot_entry *entry_list;
 
 static void event_handler(lv_obj_t * obj, lv_event_t event)
 {
-    
+    boot_android_from_system();
+    add_button_to_menu(event_handler, "Click");
 }
 
 int main(int argc, char *argv[]) {
