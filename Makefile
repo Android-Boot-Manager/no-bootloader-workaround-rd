@@ -10,7 +10,7 @@ WARNINGS ?= -Wall -Wextra \
 						-Wno-unused-function -Wno-error=strict-prototypes -Wpointer-arith -fno-strict-aliasing -Wno-error=cpp -Wuninitialized \
 						-Wno-unused-parameter -Wno-missing-field-initializers -Wno-format-nonliteral -Wno-cast-qual -Wunreachable-code -Wno-switch-default  \
 					  -Wreturn-type -Wmultichar -Wformat-security -Wno-ignored-qualifiers -Wno-error=pedantic -Wno-sign-compare -Wno-error=missing-prototypes -Wdouble-promotion -Wclobbered -Wdeprecated  \
-						-Wempty-body -Wshift-negative-value -Wstack-usage=2048 \
+						-Wempty-body  -Wstack-usage=2048 \
             -Wtype-limits -Wsizeof-pointer-memaccess -Wpointer-arith
             
 CFLAGS ?= -O3 -g0 -I$(LVGL_DIR)/ $(WARNINGS) -static
@@ -59,6 +59,11 @@ rdcpiogz-vollaphone: rd
 	
 rdcpiogz-river: rd
 	@cp devices/river/env.sh out/rd/env.sh
+	@echo "Compressing rd with cpio"
+	@(cd out/rd/ && find . | cpio -o -H newc | gzip > ../rd.cpio.gz)
+	
+rdcpiogz-karnak: rd
+	@cp devices/karnak/env.sh out/rd/env.sh
 	@echo "Compressing rd with cpio"
 	@(cd out/rd/ && find . | cpio -o -H newc | gzip > ../rd.cpio.gz)
 
