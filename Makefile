@@ -84,4 +84,4 @@ $(BIN): $(AOBJS) $(COBJS) $(MAINOBJ)
 
 clean:
 	@echo "CLEAN"
-	@rm -rf $(BIN) $(AOBJS) $(COBJS) $(MAINOBJ) 
+	@rm -rf $(BIN) $(AOBJS) $(COBJS) $(MAINOBJ) $(OUT) 
