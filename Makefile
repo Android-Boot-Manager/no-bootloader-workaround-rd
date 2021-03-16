@@ -67,10 +67,10 @@ rd-base: $(BIN)
 	@cp -P prebuilts/* out/rd/bin/
 	@cp scripts/* out/rd/
 	@cp $(BIN) out/rd/bin/
-	@echo "DEBUG=$(DEBUG)" >> out/rd/env.sh
 
 rd-device: out
 	@echo "BUILDRD $(DEVICE)"
+	@echo "DEBUG=$(DEBUG)" >> out/rd/env.sh
 ifeq ($(UNIVERSAL),true)
 	@echo "GEN_HEADER=false" >> out/rd/env.sh
 endif
