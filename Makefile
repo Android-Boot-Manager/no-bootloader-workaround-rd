@@ -49,15 +49,15 @@ out/:
 	@mkdir -p out/src out/utils/lv_drivers/indev out/utils/lv_drivers/gtkdrv out/utils/lv_drivers/display
 
 %.o: %.c
-	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo "CC $<"
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 out/%.o: %.c out/
-	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo "CC $<"
+	@$(CC) $(CFLAGS) -c $< -o $@
 
 rd-generic: $(BIN)
-	@echo "Building ramdisk"
+	@echo "BUILDRD generic"
 	@mkdir -p out/rd/bin
 	@cp -P prebuilts/* out/rd/bin/
 	@cp scripts/* out/rd/
@@ -66,6 +66,7 @@ rd-generic: $(BIN)
 # if needed, you can simply override this target to add per-device steps
 ifneq ($(DEVICE),generic)
 rd-$(DEVICE): rd-generic
+	@echo "BUILDRD $(DEVICE)"
 	@cp devices/$(DEVICE)/env.sh out/rd/env.sh
 endif
 
