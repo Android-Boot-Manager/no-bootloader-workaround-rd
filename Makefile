@@ -15,8 +15,8 @@ WARNINGS ?= -Wall -Wextra \
             
 CFLAGS ?= -O3 -g0 -I$(LVGL_DIR)/ $(WARNINGS) -static
 LDFLAGS ?= -lm -lpthread -static
-BIN = abm
 OUT ?= out
+BIN = $(OUT)/abm
 
 #Collect the files to compile
 MAINSRC = ./src/main.c
@@ -56,12 +56,12 @@ out/%.o: %.c out/
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo "CC $<"
 
-rd-generic: abmbin
+rd-generic: $(BIN)
 	@echo "Building ramdisk"
 	@mkdir -p out/rd/bin
 	@cp -P prebuilts/* out/rd/bin/
 	@cp scripts/* out/rd/
-	@cp abm out/rd/bin/
+	@cp $(BIN) out/rd/bin/
 
 # if needed, you can simply override this target to add per-device steps
 ifneq ($(DEVICE),generic)
@@ -77,7 +77,7 @@ out/rd.cpio.gz: out/rd.cpio
 	@echo "GZIP out/rd.cpio"
 	@gzip out/rd.cpio
 
-abmbin: $(AOBJS) $(COBJS) $(MAINOBJ)
+$(BIN): $(AOBJS) $(COBJS) $(MAINOBJ)
 	@$(CC) -o $(BIN) $(MAINOBJ) $(AOBJS) $(COBJS) $(LDFLAGS)
 
 clean:
