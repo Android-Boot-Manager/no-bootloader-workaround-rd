@@ -1,1 +1,1 @@
-void boot_android_from_system();
+void boot_android_from_system(void);

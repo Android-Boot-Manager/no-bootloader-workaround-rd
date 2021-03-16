@@ -12,6 +12,8 @@
 
 #include <config.h>
 
+#include "gui_main.h"
+
 lv_obj_t * win;
 lv_obj_t *tabview;
 lv_obj_t *tab_boot_menu;
@@ -23,11 +25,9 @@ void create_window(char * name){
     win = lv_win_create(lv_scr_act(), NULL);
     lv_win_set_title(win, name); 
     lv_win_set_scrollbar_mode(win, LV_SCRLBAR_MODE_OFF);
-    return win;
-    
 }
 
-void create_main_tabview(){
+void create_main_tabview(void){
      /*Create a Tab view object*/
     tabview = lv_tabview_create(win, NULL);
 
@@ -37,7 +37,7 @@ void create_main_tabview(){
     tab_development = lv_tabview_add_tab(tabview, "Development");
 }
 
-void create_menu(){
+void create_menu(void){
     gui_boot_menu = lv_list_create(tab_boot_menu, NULL);
     lv_obj_set_size(gui_boot_menu, lv_obj_get_width(tab_boot_menu), lv_obj_get_height(tab_boot_menu));
     lv_obj_align(gui_boot_menu, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);

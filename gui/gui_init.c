@@ -13,11 +13,9 @@
 #include <stdio.h>
 #include <threads.h>
 #include <unistd.h>
+#include "gui_init.h"
 
-static lv_indev_drv_t kp_drv;
-static lv_indev_t * kp_indev;
-
-void tick_thrd() {
+void tick_thrd(void) {
 	for(;;) {
 		usleep(5); // Sleep for 5 milliseconds
 		lv_tick_inc(5); // Tell LVGL that 5 milliseconds have passed

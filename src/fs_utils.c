@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <dirent.h>
- 
+
+#include "fs_utils.h"
+
 int dir_count_entries(const char *path) {
     struct dirent *pDirent;
     DIR *pDir;

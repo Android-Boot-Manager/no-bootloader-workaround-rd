@@ -13,7 +13,7 @@
 #define ENTRIES_DIR "/meta/db/entries"
 #define GLOBAL_CONFIG_FILE "/meta/db/db.conf"
 
-int config_parse_option(char **_dest, const char *option, const char *buffer) {
+static int config_parse_option(char **_dest, const char *option, const char *buffer) {
 	char *temp = strstr(buffer, option);
 	if(!temp)
 		return -1;
@@ -36,7 +36,7 @@ int config_parse_option(char **_dest, const char *option, const char *buffer) {
 	return 0;
 }
 
-int parse_boot_entry_file(struct boot_entry *entry, char *file) {
+static int parse_boot_entry_file(struct boot_entry *entry, char *file) {
 	int ret;
     FILE *fp;
 	unsigned char *buf;
@@ -111,7 +111,7 @@ int get_entry_count(void) {
 
 int parse_boot_entries(struct boot_entry **_entry_list) {
 	int ret;
-    printf("Begin parsing entrys.%s");
+    printf("Begin parsing entrys.");
 
     struct boot_entry *entry_list=malloc(sizeof(struct boot_entry)*dir_count_entries(ENTRIES_DIR));    
 

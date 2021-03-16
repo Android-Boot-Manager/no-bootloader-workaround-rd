@@ -2,7 +2,10 @@
 #include <sys/stat.h>
 #include <abm_device.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <gui_error.h>
+
+#include "partition.h"
 
 void mount_sdcard_meta(struct abm_device device) {
     mkdir("/meta", 0700);

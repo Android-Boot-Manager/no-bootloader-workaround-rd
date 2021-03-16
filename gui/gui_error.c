@@ -10,6 +10,8 @@
 #include <threads.h>
 #include <unistd.h> 
 
+#include "gui_error.h"
+
 void show_error(char * message){
     usleep(50000);
     lv_obj_t * label1 = lv_label_create(lv_scr_act(), NULL);
