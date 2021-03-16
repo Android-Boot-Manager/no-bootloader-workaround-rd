@@ -27,6 +27,12 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 int main(int argc, char *argv[]) {
     printf("Abm start\n");
 
+#ifdef DEVICE_CONFIG_H
+    device.dpi= DPI;
+    device.codname = CODENAME;
+    device.sd_card_meta_path = SD_META_PATH;
+    device.touchscreen_dev_path = TOUCHSCREEN_PATH;
+#else
     if(argc<5)
     {
         printf("ERROR: Not enough arguments\n");
@@ -37,7 +43,8 @@ int main(int argc, char *argv[]) {
     device.codname = argv[2];
     device.sd_card_meta_path = argv[3];
     device.touchscreen_dev_path = argv[4];
-    
+#endif
+
     printf("Running on: %s, dpi: %d\n", device.codname, device.dpi);
     
     gui_init(&device);

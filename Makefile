@@ -38,6 +38,7 @@ OBJS = $(AOBJS) $(COBJS)
 
 DEVICE ?= generic
 DEBUG ?= false
+UNIVERSAL ?= $(DEBUG)
 
 CFLAGS += -DDEBUG=$(DEBUG) -Iout/generated/
 
@@ -58,7 +59,7 @@ out/%.o: %.c out/generated/device_config.h
 
 out/generated/device_config.h: rd-$(DEVICE) out/
 	@echo "GEN $@"
-	@sh utils/gen_config_h.sh out/rd/env.sh $@
+	@sh tools/gen_config_h.sh out/rd/env.sh $@
 
 rd-base: $(BIN)
 	@echo "BUILDRD base"
@@ -66,6 +67,9 @@ rd-base: $(BIN)
 	@cp scripts/* out/rd/
 	@cp $(BIN) out/rd/bin/
 	@echo "DEBUG=$(DEBUG)" >> out/rd/env.sh
+ifeq ($(UNIVERSAL),true)
+	@echo "GEN_HEADER=false" >> out/rd/env.sh
+endif
 
 rd-device: out/
 	@echo "BUILDRD $(DEVICE)"
@@ -76,7 +80,7 @@ rd-default: rd-device
 include devices.mk
 
 # Test if there is an device rule present. If not, use the default.
-ifneq ($(shell make -qf utils/dummy.mk rd-$(DEVICE) 2>/dev/null; test $$? -le 1 && echo ok),ok)
+ifneq ($(shell make -qf tools/dummy.mk rd-$(DEVICE) 2>/dev/null; test $$? -le 1 && echo ok),ok)
 rd-$(DEVICE): rd-default
 endif
 
