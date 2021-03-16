@@ -31,7 +31,7 @@ OBJEXT ?= .o
 AOBJS = $(addprefix $(OUT)/, $(ASRCS:.a=.o))
 COBJS = $(addprefix $(OUT)/, $(CSRCS:.c=.o))
 
-MAINOBJ = $(MAINSRC:.c=$(OBJEXT))
+MAINOBJ = $(addprefix $(OUT)/, $(MAINSRC:.c=$(OBJEXT)))
 
 SRCS = $(ASRCS) $(CSRCS) $(MAINSRC)
 OBJS = $(AOBJS) $(COBJS)
