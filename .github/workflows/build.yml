@@ -22,6 +22,6 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
           name: binary
-          path: abm
+          path: out/abm
     - name: Build for device
       run: make DEVICE=vollaphone -j$(nproc --all)
