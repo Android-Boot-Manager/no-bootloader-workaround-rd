@@ -49,7 +49,7 @@ out/:
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo "CC $<"
 
-out/%.o: %.c
+out/%.o: %.c out/
 	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo "CC $<"
 
