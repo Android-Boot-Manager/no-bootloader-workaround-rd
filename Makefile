@@ -37,6 +37,9 @@ SRCS = $(ASRCS) $(CSRCS) $(MAINSRC)
 OBJS = $(AOBJS) $(COBJS)
 
 DEVICE ?= generic
+DEBUG ?= false
+
+CFLAGS += -DDEBUG=$(DEBUG)
 
 ## MAINOBJ -> OBJFILES
 
