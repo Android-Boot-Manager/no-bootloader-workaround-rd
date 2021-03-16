@@ -75,9 +75,10 @@ out/rd.cpio: rd-$(DEVICE)
 
 out/rd.cpio.gz: out/rd.cpio
 	@echo "GZIP out/rd.cpio"
-	@gzip out/rd.cpio
+	@gzip -k out/rd.cpio
 
 $(BIN): $(AOBJS) $(COBJS) $(MAINOBJ)
+	@echo "LD $(BIN)"
 	@$(CC) -o $(BIN) $(MAINOBJ) $(AOBJS) $(COBJS) $(LDFLAGS)
 
 clean:
