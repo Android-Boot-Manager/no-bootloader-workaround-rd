@@ -65,6 +65,7 @@ void gui_init(struct abm_device *device) {
     // enable event input
 	evdev_init();
 
+	evdev_set_file(device->touchscreen_dev_path);
 	// get mouse as an input
 	lv_indev_drv_t indev_drv;
 	lv_indev_drv_init(&indev_drv);
