@@ -4,6 +4,7 @@
 #include <gui_main.h>
 
 #include <abm_device.h>
+#include <device_config.h>
 #include <partition.h>
 
 #include <dirent.h>
