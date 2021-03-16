@@ -1,0 +1,123 @@
+#!/bin/sh
+
+####
+# Default profile
+USB_IDVENDOR=0FCE
+USB_IDPRODUCT=7169
+USB_IPRODUCT="Unknown"
+USB_ISERIAL="Unknown"
+USB_IMANUFACTURER="GNU/Linux Device"
+USB_IFACE=""
+
+####
+# Override profile
+if [ -f /etc/default/hybris-device ]; then
+    source /etc/default/hybris-device
+fi
+
+ANDROID_USB=/sys/class/android_usb/android0
+USB_FUNCTIONS=rndis
+LOCAL_IP=10.15.19.82
+GADGET_DIR=/sys/kernel/config/usb_gadget
+
+write() {
+    echo -n "$2" > "$1"
+}
+
+# This sets up the USB with whatever USB_FUNCTIONS are set to via configfs
+usb_setup_configfs() {
+    G_USB_ISERIAL=$GADGET_DIR/g1/strings/0x409/serialnumber
+
+    mkdir $GADGET_DIR/g1
+    write $GADGET_DIR/g1/idVendor                   "0x$USB_IDVENDOR"
+    write $GADGET_DIR/g1/idProduct                  "0x$USB_IDPRODUCT"
+    mkdir $GADGET_DIR/g1/strings/0x409
+    write $GADGET_DIR/g1/strings/0x409/serialnumber "$USB_ISERIAL"
+    write $GADGET_DIR/g1/strings/0x409/manufacturer "$USB_IMANUFACTURER"
+    write $GADGET_DIR/g1/strings/0x409/product      "$USB_IPRODUCT"
+
+    if echo $USB_FUNCTIONS | grep -q "rndis"; then
+        mkdir $GADGET_DIR/g1/functions/rndis.usb0
+        mkdir $GADGET_DIR/g1/functions/rndis_bam.rndis
+    fi
+    echo $USB_FUNCTIONS | grep -q "mass_storage" && mkdir $GADGET_DIR/g1/functions/storage.0
+
+    mkdir $GADGET_DIR/g1/configs/c.1
+    mkdir $GADGET_DIR/g1/configs/c.1/strings/0x409
+    write $GADGET_DIR/g1/configs/c.1/strings/0x409/configuration "$USB_FUNCTIONS"
+
+    if echo $USB_FUNCTIONS | grep -q "rndis"; then
+        ln -s $GADGET_DIR/g1/functions/rndis.usb0 $GADGET_DIR/g1/configs/c.1
+        ln -s $GADGET_DIR/g1/functions/rndis_bam.rndis $GADGET_DIR/g1/configs/c.1
+    fi
+    echo $USB_FUNCTIONS | grep -q "mass_storage" && ln -s $GADGET_DIR/g1/functions/storage.0 $GADGET_DIR/g1/configs/c.1
+
+    echo "$(ls /sys/class/udc)" > $GADGET_DIR/g1/UDC
+}
+
+# This sets up the USB with whatever USB_FUNCTIONS are set to via android_usb
+usb_setup_android_usb() {
+    G_USB_ISERIAL=$ANDROID_USB/iSerial
+    write $ANDROID_USB/enable          0
+    write $ANDROID_USB/functions       ""
+    write $ANDROID_USB/enable          1
+    usleep 500000 # 0.5 delay to attempt to remove rndis function
+    write $ANDROID_USB/enable          0
+    write $ANDROID_USB/idVendor        $USB_IDVENDOR
+    write $ANDROID_USB/idProduct       $USB_IDPRODUCT
+    write $ANDROID_USB/iManufacturer   "$USB_IMANUFACTURER"
+    write $ANDROID_USB/iProduct        "$USB_IPRODUCT"
+    write $ANDROID_USB/iSerial         "$USB_ISERIAL"
+    write $ANDROID_USB/functions       $USB_FUNCTIONS
+    write $ANDROID_USB/enable          1
+}
+
+# This determines which USB setup method is going to be used
+usb_setup() {
+    mount -t configfs none /sys/kernel/config || true
+
+    if [ -d $ANDROID_USB ]; then
+        usb_setup_android_usb $1
+    elif [ -d $GADGET_DIR ]; then
+        usb_setup_configfs $1
+    fi
+}
+
+usb_info() {
+    sleep 1
+    write $G_USB_ISERIAL "$1"
+    echo "$1" >> /var/log/usb_info.log
+}
+
+ip_setup() {
+    if [ -n "$USB_IFACE" ]; then
+        ifconfig $USB_IFACE $LOCAL_IP netmask 255.255.255.0
+        return
+    fi
+    
+    ifconfig rndis0 $LOCAL_IP netmask 255.255.255.0 && USB_IFACE=rndis0
+    if [ -z "$USB_IFACE" ]; then
+        ifconfig usb0 $LOCAL_IP && USB_IFACE=usb0
+    fi
+
+    if [ -z "$USB_IFACE" ]; then
+        usb_info "could not setup USB tethering!"
+        systemd-notify --ready --status="could not setup USB tethering!"
+        return 1
+    fi
+
+    usb_info "$USB_IMANUFACTURER on $USB_IFACE $LOCAL_IP"
+    systemd-notify --ready --status="$USB_IMANUFACTURER on $USB_IFACE $LOCAL_IP"
+}
+
+dhcpd_start() {
+    mkdir -p /run/hybris-usb
+    touch /run/hybris-usb/dhcpd4.lease
+    dhcpd -f -4 -q -cf /etc/hybris-usb/dhcpd.conf -pf /run/hybris-usb/dhcpd4.pid -lf /run/hybris-usb/dhcpd4.lease
+}
+
+usb_setup
+ip_setup
+dhcpd_start
+
+exit $?

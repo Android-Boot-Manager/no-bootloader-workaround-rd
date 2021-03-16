@@ -28,12 +28,15 @@ else
     . /env-fallback.sh
 fi
 
-sleep 10
+#mount tmpfs /dev
+/usb-tethering 
+telnetd -b 10.15.19.82:23 -l /bin/sh &
+sleep 3
 abm "$DEVICE_DPI" "$DEVICECODNAME" "$SD_META_PATH" "$TOUCHSCREEN_PATH"
-
+echo "hi abm" > /dev/kmsg
 while true
 do
-    echo hi
-    sleep 5
+    telnetd -b 10.15.19.82:23 -l /bin/sh
+    sleep 1
 done
 
