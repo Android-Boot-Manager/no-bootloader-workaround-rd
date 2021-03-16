@@ -67,12 +67,12 @@ rd-base: $(BIN)
 	@cp scripts/* out/rd/
 	@cp $(BIN) out/rd/bin/
 	@echo "DEBUG=$(DEBUG)" >> out/rd/env.sh
-ifeq ($(UNIVERSAL),true)
-	@echo "GEN_HEADER=false" >> out/rd/env.sh
-endif
 
 rd-device: out/
 	@echo "BUILDRD $(DEVICE)"
+ifeq ($(UNIVERSAL),true)
+	@echo "GEN_HEADER=false" >> out/rd/env.sh
+endif
 
 rd-default: rd-device
 	@cat devices/$(DEVICE)/env.sh >> out/rd/env.sh
