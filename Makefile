@@ -1,9 +1,9 @@
 #
 # Makefile
 #
-CC ?= gcc
+CC ?= $(CROSS_COMPILE)gcc
 LVGL_DIR_NAME ?= lvgl
-LVGL_DIR ?= ${shell pwd}/utils/
+LVGL_DIR ?= utils
 
 WARNINGS ?= -Wall -Wextra \
 						-Wshadow -Wundef -Wmaybe-uninitialized -Wmissing-prototypes -Wno-discarded-qualifiers \
@@ -16,7 +16,7 @@ WARNINGS ?= -Wall -Wextra \
 CFLAGS ?= -O3 -g0 -I$(LVGL_DIR)/ $(WARNINGS) -static
 LDFLAGS ?= -lm -lpthread -static
 BIN = abm
-
+OUT ?= out
 
 #Collect the files to compile
 MAINSRC = ./src/main.c
@@ -28,51 +28,55 @@ include $(LVGL_DIR)/lv_drivers/lv_drivers.mk
 
 OBJEXT ?= .o
 
-AOBJS = $(ASRCS:.S=$(OBJEXT))
-COBJS = $(CSRCS:.c=$(OBJEXT))
+AOBJS = $(addprefix $(OUT)/, $(ASRCS:.a=.o))
+COBJS = $(addprefix $(OUT)/, $(CSRCS:.c=.o))
 
-MAINOBJ = $(MAINSRC:.c=$(OBJEXT))
+MAINOBJ = $(addprefix $(OUT)/, $(MAINSRCS:.c=.o))
 
 SRCS = $(ASRCS) $(CSRCS) $(MAINSRC)
 OBJS = $(AOBJS) $(COBJS)
 
+DEVICE ?= generic
+
 ## MAINOBJ -> OBJFILES
 
-all: rdcpiogz-generic rdcpiogz-vollaphone
+default: clean out/rd.cpio.gz
+
+out/:
+	@mkdir -p out/src out/utils/lv_drivers/indev out/utils/lv_drivers/gtkdrv out/utils/lv_drivers/display
 
 %.o: %.c
-	@$(CC)  $(CFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) -c $< -o $@
 	@echo "CC $<"
-    
 
-rd: abmbin
+out/%.o: %.c
+	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "CC $<"
+
+rd-generic: abmbin
 	@echo "Building ramdisk"
 	@mkdir -p out/rd/bin
 	@cp -P prebuilts/* out/rd/bin/
 	@cp scripts/* out/rd/
 	@cp abm out/rd/bin/
-	
-rdcpiogz-vollaphone: rd
-	@cp devices/vollaphone/env.sh out/rd/env.sh
-	@echo "Compressing rd with cpio"
-	@(cd out/rd/ && find . | cpio -o -H newc | gzip > ../rd-yggdrasil.cpio.gz)
-	
-rdcpiogz-river: rd
-	@cp devices/river/env.sh out/rd/env.sh
-	@echo "Compressing rd with cpio"
-	@(cd out/rd/ && find . | cpio -o -H newc | gzip > ../rd.cpio.gz)
-	
-rdcpiogz-karnak: rd
-	@cp devices/karnak/env.sh out/rd/env.sh
-	@echo "Compressing rd with cpio"
-	@(cd out/rd/ && find . | cpio -o -H newc | gzip > ../rd.cpio.gz)
 
-rdcpiogz-generic: rd
-	@echo "Compressing rd with cpio"
-	@(cd out/rd/ && find . | cpio -o -H newc | gzip > ../rd.cpio.gz)
+# if needed, you can simply override this target to add per-device steps
+ifneq ($(DEVICE),generic)
+rd-$(DEVICE): rd-generic
+	@cp devices/$(DEVICE)/env.sh out/rd/env.sh
+endif
+
+out/rd.cpio: rd-$(DEVICE)
+	@echo "CPIO out/rd"
+	@(cd out/rd/ && find . | cpio -o -H newc > ../rd.cpio)
+
+out/rd.cpio.gz: out/rd.cpio
+	@echo "GZIP out/rd.cpio"
+	@gzip out/rd.cpio
 
 abmbin: $(AOBJS) $(COBJS) $(MAINOBJ)
-	$(CC) -o $(BIN) $(MAINOBJ) $(AOBJS) $(COBJS) $(LDFLAGS)
+	@$(CC) -o $(BIN) $(MAINOBJ) $(AOBJS) $(COBJS) $(LDFLAGS)
 
-clean: 
-	rm -f $(BIN) $(AOBJS) $(COBJS) $(MAINOBJ) 
+clean:
+	@echo "CLEAN"
+	@rm -rf $(BIN) $(AOBJS) $(COBJS) $(MAINOBJ) 
