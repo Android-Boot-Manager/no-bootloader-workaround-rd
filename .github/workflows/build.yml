@@ -23,3 +23,5 @@ jobs:
       with:
           name: binary
           path: abm
+    - name: Build for device
+      run: make DEVICE=vollaphone
