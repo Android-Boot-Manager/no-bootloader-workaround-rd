@@ -39,38 +39,48 @@ OBJS = $(AOBJS) $(COBJS)
 DEVICE ?= generic
 DEBUG ?= false
 
-CFLAGS += -DDEBUG=$(DEBUG)
+CFLAGS += -DDEBUG=$(DEBUG) -Iout/generated/
 
 ## MAINOBJ -> OBJFILES
 
 default: clean out/rd.cpio.gz
 
 out/:
-	@mkdir -p out/src out/utils/lv_drivers/indev out/utils/lv_drivers/gtkdrv out/utils/lv_drivers/display
+	@mkdir -p out/src out/rd/bin out/generated out/utils/lv_drivers/indev out/utils/lv_drivers/gtkdrv out/utils/lv_drivers/display
 
-%.o: %.c
+%.o: %.c out/generated/device_config.h
 	@echo "CC $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-out/%.o: %.c out/
+out/%.o: %.c out/generated/device_config.h
 	@echo "CC $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-rd-generic: $(BIN)
-	@echo "BUILDRD generic"
-	@mkdir -p out/rd/bin
+out/generated/device_config.h: rd-$(DEVICE) out/
+	@echo "GEN $@"
+	@sh utils/gen_config_h.sh out/rd/env.sh $@
+
+rd-base: $(BIN)
+	@echo "BUILDRD base"
 	@cp -P prebuilts/* out/rd/bin/
 	@cp scripts/* out/rd/
 	@cp $(BIN) out/rd/bin/
+	@echo "DEBUG=$(DEBUG)" >> out/rd/env.sh
 
-# if needed, you can simply override this target to add per-device steps
-ifneq ($(DEVICE),generic)
-rd-$(DEVICE): rd-generic
+rd-device: out/
 	@echo "BUILDRD $(DEVICE)"
-	@cp devices/$(DEVICE)/env.sh out/rd/env.sh
+
+rd-default: rd-device
+	@cat devices/$(DEVICE)/env.sh >> out/rd/env.sh
+	
+include devices.mk
+
+# Test if there is an device rule present. If not, use the default.
+ifneq ($(shell make -qf utils/dummy.mk rd-$(DEVICE) 2>/dev/null; test $$? -le 1 && echo ok),ok)
+rd-$(DEVICE): rd-default
 endif
 
-out/rd.cpio: rd-$(DEVICE)
+out/rd.cpio: rd-base
 	@echo "CPIO out/rd"
 	@(cd out/rd/ && find . | cpio -o -H newc > ../rd.cpio)
 

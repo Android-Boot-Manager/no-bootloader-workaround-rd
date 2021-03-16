@@ -1,4 +1,4 @@
-DEVICECODNAME="karnak"
+DEVICECODENAME="karnak"
 DEVICE_DPI="120"
 SD_META_PATH="/dev/mmcblk1p1"
 TOUCHSCREEN_PATH="/dev/input/event3"

@@ -1,4 +1,4 @@
 boot.img
 abm
 *.o
-out/
+out

@@ -1,3 +1,0 @@
-DEVICECODNAME="unknown"
-DEVICE_DPI="300"
-

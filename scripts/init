@@ -22,17 +22,15 @@ echo "Installing Busybox..." && /bin/busybox --install -s
 echo /sbin/mdev > /proc/sys/kernel/hotplug
 mdev -s
 
-if [ -f "env.sh" ]; then
-    . /env.sh
-else 
-    . /env-fallback.sh
-fi
+. /env.sh
+
+export DEVICE_DPI DEVICECODENAME SD_META_PATH TOUCHSCREEN_PATH DEBUG
 
 #mount tmpfs /dev
 /usb-tethering 
 telnetd -b 10.15.19.82:23 -l /bin/sh &
 sleep 3
-abm "$DEVICE_DPI" "$DEVICECODNAME" "$SD_META_PATH" "$TOUCHSCREEN_PATH"
+abm "$DEVICE_DPI" "$DEVICECODENAME" "$SD_META_PATH" "$TOUCHSCREEN_PATH"
 echo "hi abm" > /dev/kmsg
 while true
 do
