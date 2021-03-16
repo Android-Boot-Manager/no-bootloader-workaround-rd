@@ -44,9 +44,10 @@ CFLAGS += -DDEBUG=$(DEBUG) -Iout/generated/
 
 ## MAINOBJ -> OBJFILES
 
-default: clean out/rd.cpio.gz
+default: clean 
+	+@make out/rd.cpio.gz
 
-out/:
+out:
 	@mkdir -p out/src out/rd/bin out/generated out/utils/lv_drivers/indev out/utils/lv_drivers/gtkdrv out/utils/lv_drivers/display
 
 %.o: %.c out/generated/device_config.h
@@ -57,7 +58,7 @@ out/%.o: %.c out/generated/device_config.h
 	@echo "CC $<"
 	@$(CC) $(CFLAGS) -c $< -o $@
 
-out/generated/device_config.h: rd-$(DEVICE) out/
+out/generated/device_config.h: out rd-$(DEVICE)
 	@echo "GEN $@"
 	@sh tools/gen_config_h.sh out/rd/env.sh $@
 
@@ -68,7 +69,7 @@ rd-base: $(BIN)
 	@cp $(BIN) out/rd/bin/
 	@echo "DEBUG=$(DEBUG)" >> out/rd/env.sh
 
-rd-device: out/
+rd-device: out
 	@echo "BUILDRD $(DEVICE)"
 ifeq ($(UNIVERSAL),true)
 	@echo "GEN_HEADER=false" >> out/rd/env.sh
