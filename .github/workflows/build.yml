@@ -24,4 +24,4 @@ jobs:
           name: binary
           path: out/abm
     - name: Build for device
-      run: make DEVICE=vollaphone -j$(nproc --all)
+      run: make DEVICE=yggdrasil -j$(nproc --all)
