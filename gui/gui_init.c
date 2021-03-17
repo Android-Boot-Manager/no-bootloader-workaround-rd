@@ -34,14 +34,14 @@ void gui_init(struct abm_device *device) {
 	evdev_init();
 
 	// Set up buffer
-	static lv_disp_buf_t disp_buf;
+	static lv_disp_draw_buf_t disp_buf;
 	static lv_color_t buf[LV_HOR_RES_MAX * LV_VER_RES_MAX];
-	lv_disp_buf_init(&disp_buf, buf, NULL, LV_HOR_RES_MAX * LV_VER_RES_MAX);
+	 lv_disp_draw_buf_init(&disp_buf, buf, NULL, LV_HOR_RES_MAX * LV_VER_RES_MAX);
 
 	// Set up display
 	lv_disp_drv_t disp_drv;
 	lv_disp_drv_init(&disp_drv);
-	disp_drv.buffer = &disp_buf;
+	disp_drv.draw_buf = &disp_buf;
 	disp_drv.flush_cb = fbdev_flush;
     
     // Get resolution

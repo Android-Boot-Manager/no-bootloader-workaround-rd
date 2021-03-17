@@ -30,7 +30,8 @@ export DEVICE_DPI DEVICECODENAME SD_META_PATH TOUCHSCREEN_PATH DEBUG
 /usb-tethering 
 telnetd -b 10.15.19.82:23 -l /bin/sh &
 sleep 3
-abm "$DEVICE_DPI" "$DEVICECODENAME" "$SD_META_PATH" "$TOUCHSCREEN_PATH"
+#abm "$DEVICE_DPI" "$DEVICECODENAME" "$SD_META_PATH" "$TOUCHSCREEN_PATH"
+exec /boot-android-sar.sh
 echo "hi abm" > /dev/kmsg
 while true
 do

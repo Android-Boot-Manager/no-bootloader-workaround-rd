@@ -24,12 +24,12 @@ lv_obj_t * gui_boot_menu;
 void create_window(char * name){
     win = lv_win_create(lv_scr_act(), NULL);
     lv_win_set_title(win, name); 
-    lv_win_set_scrollbar_mode(win, LV_SCRLBAR_MODE_OFF);
+    lv_win_set_scrollbar_mode(win, LV_SCROLLBAR_MODE_OFF);
 }
 
 void create_main_tabview(void){
      /*Create a Tab view object*/
-    tabview = lv_tabview_create(win, NULL);
+    tabview = lv_tabview_create(win, LV_DIR_TOP, NULL);
 
     /*Add 3 tabs (the tabs are page (lv_page) and can be scrolled*/
     tab_boot_menu = lv_tabview_add_tab(tabview, "Boot Menu");
@@ -38,13 +38,12 @@ void create_main_tabview(void){
 }
 
 void create_menu(void){
-    gui_boot_menu = lv_list_create(tab_boot_menu, NULL);
+    gui_boot_menu = lv_list_create(tab_boot_menu);
     lv_obj_set_size(gui_boot_menu, lv_obj_get_width(tab_boot_menu), lv_obj_get_height(tab_boot_menu));
     lv_obj_align(gui_boot_menu, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
 }
 
 void add_button_to_menu(lv_event_cb_t event_cb, char * text){
-    lv_obj_t * list_btn = lv_list_add_btn(gui_boot_menu,  LV_SYMBOL_FILE, text);
-    lv_obj_set_event_cb(list_btn, event_cb);
+    lv_obj_t * list_btn = lv_list_add_btn(gui_boot_menu,  LV_SYMBOL_FILE, text, event_cb);
     
 }
