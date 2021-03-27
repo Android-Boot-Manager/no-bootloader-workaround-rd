@@ -8,7 +8,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <threads.h>
-#include <unistd.h> 
+#include <unistd.h>
 
 #include <config.h>
 
@@ -23,8 +23,8 @@ lv_obj_t * gui_boot_menu;
 
 void create_window(char * name){
     win = lv_win_create(lv_scr_act(), NULL);
-    lv_win_set_title(win, name); 
-    lv_win_set_scrollbar_mode(win, LV_SCROLLBAR_MODE_OFF);
+    lv_win_add_title(win, name);
+    lv_obj_set_scrollbar_mode(win, LV_SCROLLBAR_MODE_OFF);
 }
 
 void create_main_tabview(void){
@@ -40,10 +40,10 @@ void create_main_tabview(void){
 void create_menu(void){
     gui_boot_menu = lv_list_create(tab_boot_menu);
     lv_obj_set_size(gui_boot_menu, lv_obj_get_width(tab_boot_menu), lv_obj_get_height(tab_boot_menu));
-    lv_obj_align(gui_boot_menu, NULL, LV_ALIGN_IN_TOP_LEFT, 0, 0);
+    lv_obj_align(gui_boot_menu, LV_ALIGN_TOP_LEFT, 0, 0);
 }
 
 void add_button_to_menu(lv_event_cb_t event_cb, char * text){
     lv_obj_t * list_btn = lv_list_add_btn(gui_boot_menu,  LV_SYMBOL_FILE, text, event_cb);
-    
+
 }

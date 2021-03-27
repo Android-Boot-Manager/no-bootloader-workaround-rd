@@ -43,14 +43,14 @@ void gui_init(struct abm_device *device) {
 	lv_disp_drv_init(&disp_drv);
 	disp_drv.draw_buf = &disp_buf;
 	disp_drv.flush_cb = fbdev_flush;
-    
+
     // Get resolution
     uint32_t width,height=0;
     fbdev_get_sizes(&width, &height);
-    
+
     printf("Framebuffer resolution: %d x %d\n", width, height);
-    
-    
+
+
     // Set resolution
     device->x_res=width;
     device->y_res=height;
@@ -59,7 +59,7 @@ void gui_init(struct abm_device *device) {
     disp_drv.dpi = device->dpi;
     // Register disp drv
 	lv_disp_drv_register(&disp_drv);
-    
+
     // enable event input
 	evdev_init();
 
@@ -69,10 +69,10 @@ void gui_init(struct abm_device *device) {
 	lv_indev_drv_init(&indev_drv);
 	indev_drv.type = LV_INDEV_TYPE_POINTER;
 	indev_drv.read_cb = evdev_read;
-	
+
 	lv_indev_t * mouse_indev = lv_indev_drv_register(&indev_drv);
 
-	lv_obj_t * cursor_obj = lv_img_create(lv_scr_act(), NULL); //Create an image for the cursor
+	lv_obj_t * cursor_obj = lv_img_create(lv_scr_act()); //Create an image for the cursor
 	lv_img_set_src(cursor_obj, LV_SYMBOL_FILE); //For simlicity add a built in symbol not an image
 	lv_indev_set_cursor(mouse_indev, cursor_obj); // connect the object to the driver
 
