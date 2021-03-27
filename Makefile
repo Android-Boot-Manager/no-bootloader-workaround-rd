@@ -111,4 +111,4 @@ $(BIN): $(OBJS) $(MAINOBJ)
 
 clean:
 	@echo "CLEAN"
-	@rm -rf $(BIN) $(AOBJS) $(COBJS) $(MAINOBJ) $(OUT)
+	@rm -rf $(BIN) $(OBJS) $(MAINOBJ) $(OUT)
