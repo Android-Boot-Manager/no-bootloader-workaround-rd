@@ -1,1 +1,1 @@
-void mount_sdcard_meta();
+void mount_sdcard_meta(void);
