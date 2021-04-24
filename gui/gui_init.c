@@ -1,6 +1,7 @@
 #include "../utils/lv_drv_conf.h"
 #include "../utils/lvgl/lvgl.h"
 #include <abm_device.h>
+#include <device_config.h>
 
 #include "../utils/lv_drivers/display/fbdev.h"
 
@@ -56,14 +57,14 @@ void gui_init(struct abm_device *device) {
     device->y_res=height;
     disp_drv.hor_res = width;
     disp_drv.ver_res = height;
-    disp_drv.dpi = device->dpi;
+    disp_drv.dpi = DPI;
     // Register disp drv
 	lv_disp_drv_register(&disp_drv);
 
     // enable event input
 	evdev_init();
+	evdev_set_file(TOUCHSCREEN_PATH);
 
-	evdev_set_file(device->touchscreen_dev_path);
 	// get mouse as an input
 	lv_indev_drv_t indev_drv;
 	lv_indev_drv_init(&indev_drv);

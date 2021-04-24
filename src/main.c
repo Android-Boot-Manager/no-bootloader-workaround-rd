@@ -28,18 +28,11 @@ static void event_handler(lv_obj_t * obj, lv_event_t event)
 int main(int argc, char *argv[]) {
     printf("Abm start\n");
 
-    device.dpi= DPI;
-    device.codname = CODENAME;
-    device.sd_card_meta_path = SD_META_PATH;
-    device.touchscreen_dev_path = TOUCHSCREEN_PATH;
-
     printf("Running on: %s, dpi: %d\n", CODENAME, DPI);
     
     gui_init(&device);
     
-    mount_sdcard_meta();
-    
-    
+    mount_sdcard_meta(); 
     
     parse_boot_entries(&entry_list);
      
