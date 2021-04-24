@@ -37,7 +37,7 @@ int main(int argc, char *argv[]) {
     
     gui_init(&device);
     
-    mount_sdcard_meta(device);
+    mount_sdcard_meta();
     
     
     
