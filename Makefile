@@ -40,7 +40,6 @@ OBJS = $(AOBJS) $(COBJS) $(CXXOBJS)
 
 DEVICE ?= generic
 DEBUG ?= false
-UNIVERSAL ?= $(DEBUG)
 
 CFLAGS += -DDEBUG=$(DEBUG) -Iout/generated/
 CXXFLAGS += -DDEBUG=$(DEBUG) -Iout/generated/
@@ -83,9 +82,6 @@ rd-base: $(BIN)
 rd-device: out
 	@echo "BUILDRD $(DEVICE)"
 	@echo "DEBUG=$(DEBUG)" >> out/rd/env.sh
-ifeq ($(UNIVERSAL),true)
-	@echo "GEN_HEADER=false" >> out/rd/env.sh
-endif
 
 rd-default: rd-device
 	@cat devices/$(DEVICE)/env.sh >> out/rd/env.sh

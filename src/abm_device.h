@@ -1,5 +1,6 @@
 #ifndef ABM_DEVICEH
 #define ABM_DEVICEH
+//TODO: remove this, instead use constants
 struct abm_device {
    int  dpi;
    int x_res;
